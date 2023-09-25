@@ -4,25 +4,31 @@ on:
     paths:
       - 'docs/**'
 jobs:
-  build-and-deploy:
+  build-deploy:
+    name: Build and deploy docs
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
 
-      - name: Install MkDocs
-        run: pip install mkdocs
-      
-      - name: Install dependencies
-        run: pip install mkdocs-material pymdown-extensions
+      - name: Set up Python 3 ⚙️ 🐍
+        uses: actions/setup-python@v2
 
-      - name: Build MkDocs site
-        run: mkdocs build
-
-      - name: Deploy to GitHub Pages
-        uses: actions/github-script@v7
+      - name: Cache dependencies 💾
+        uses: actions/cache@v2
         with:
-          script: |
-            github.actions.createBranch(ref, { force: true });
-            github.actions.checkout(ref);
-            github.actions.uploadArtifact('public', '**');
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('docs/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+
+      - name: Install dependencies 🔧
+        working-directory: docs
+        run: make install
+
+      - name: Build and deploy to GitHub Pages 🏗️ 🚀
+        working-directory: docs
+        run: make deploy
