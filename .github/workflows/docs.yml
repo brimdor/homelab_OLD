@@ -20,7 +20,7 @@ jobs:
         run: mkdocs build
 
       - name: Deploy to GitHub Pages
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.actions.createBranch(ref, { force: true });
