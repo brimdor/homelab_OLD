@@ -48,25 +48,25 @@ spec:
   selector:
     app: lidarr
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: lidarr-connect
-#   labels:
-#     app: lidarr
-#     app.kubernetes.io/name: lidarr
-#     app.kubernetes.io/instance: lidarr
-# spec:
-#   clusterIP: 10.43.10.216
-#   ports:
-#     - name: http
-#       port: 8686
-#       targetPort: 8686
-#       protocol: TCP
-#   selector:
-#     app: lidarr
-#   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr-connect
+  labels:
+    app: lidarr
+    app.kubernetes.io/name: lidarr
+    app.kubernetes.io/instance: lidarr
+spec:
+  clusterIP: 10.43.10.216
+  ports:
+    - name: http
+      port: 8686
+      targetPort: 8686
+      protocol: TCP
+  selector:
+    app: lidarr
+  type: ClusterIP
 
 ---
 apiVersion: apps/v1
@@ -88,7 +88,7 @@ spec:
       labels:
         app: lidarr
     spec:
-      nodeName: bulbasaur
+      nodeName: pikachu
       containers:
         - name: lidarr
           image: lscr.io/linuxserver/lidarr:latest
@@ -112,6 +112,8 @@ spec:
             #   value: /root
             - name: LANGUAGE
               value: en_US.UTF-8
+            - name: DOCKER_MODS
+              value: linuxserver/mods:lidarr-flac2mp3
             # - name: TERM
             #   value: xterm
             # - name: XDG_CONFIG_HOME
