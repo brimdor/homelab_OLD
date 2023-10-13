@@ -116,6 +116,8 @@ spec:
               mountPath: /movies
             - name: tv
               mountPath: /tv
+            - name: music
+              mountPath: /music
             - name: backup
               mountPath: /backups
           env:
@@ -158,3 +160,7 @@ spec:
           nfs:
             server: 10.0.50.3
             path: /mnt/user/tv
+        - name: music
+          nfs:
+            server: 10.0.50.3
+            path: /mnt/user/music
