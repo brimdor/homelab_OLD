@@ -106,16 +106,16 @@ spec:
               value: "99"
             - name: PGID
               value: "100"
-            - name: PATH
-              value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-            - name: HOME
-              value: /root
+            # - name: PATH
+            #   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            # - name: HOME
+            #   value: /root
             - name: LANGUAGE
               value: en_US.UTF-8
-            - name: TERM
-              value: xterm
-            - name: XDG_CONFIG_HOME
-              value: /config/xdg
+            # - name: TERM
+            #   value: xterm
+            # - name: XDG_CONFIG_HOME
+            #   value: /config/xdg
             - name: TZ
               value: America/Chicago
           ports:
