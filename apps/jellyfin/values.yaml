@@ -16,3 +16,11 @@ jellyfin:
         - secretName: jellyfin-tls-certificate
           hosts:
             - *host
+
+  persistence:
+    movies:
+      enabled: true
+      type: nfs
+      nfs:
+        server: 10.0.50.3
+        path: /mnt/user/movies
