@@ -16,6 +16,10 @@ jellyfin:
         - secretName: jellyfin-tls-certificate
           hosts:
             - *host
+  
+  volumeMounts:
+    - name: movies
+      mountPath: /data/movies
 
   volumes:
     movies:
