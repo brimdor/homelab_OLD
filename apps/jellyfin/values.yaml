@@ -17,7 +17,7 @@ jellyfin:
           hosts:
             - *host
 
-  persistence:
+  volumes:
     movies:
       enabled: true
       type: nfs
