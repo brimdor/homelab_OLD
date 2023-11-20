@@ -18,7 +18,7 @@ jellyfin:
             - *host
   
   volumeMounts:
-    - name: movies
+    movies:
       mountPath: /data/movies
 
   volumes:
