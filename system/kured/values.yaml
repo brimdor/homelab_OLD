@@ -11,7 +11,7 @@ kured:
     rebootSentinelCommand: sh -c "/usr/local/bin/rebooter.sh"
     rebootSentinel: /var/run/reboot-required
     period: 5m
-    reboot-days: mon,thu,fri
+    reboot-days: [mo,fr]
     start-time: 9pm
     end-time: 5am
     timeZone: America/Chicago
