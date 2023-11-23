@@ -1,11 +1,10 @@
 kured:
   configuration:
     annotateNodes: true
-    # rebootSentinelCommand: sh -c "! needs-restarting --reboothint"
     rebootSentinelCommand: sh -c "/usr/local/bin/rebooter.sh"
     rebootSentinel: /var/run/reboot-required
     period: 5m
-    reboot-days: mon,fri
-    start-time: 9pm
-    end-time: 5am
+    rebootDays: [mo,fr]
+    startTime: 21:00
+    endTime: 5:00
     timeZone: America/Chicago
