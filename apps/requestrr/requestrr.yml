@@ -89,6 +89,10 @@ spec:
         app: requestrr
     spec:
       nodeName: pikachu
+      initContainers:
+      - name: increase-limits
+        image: busybox
+        command: ['sh', '-c', 'ulimit -n 4096']
       containers:
         - name: requestrr
           image: darkalfx/requestrr:latest
@@ -105,16 +109,6 @@ spec:
           ports:
             - name: http
               containerPort: 4545
-          securityContext:
-            capabilities: {}
-            privileged: false
-            ulimits:
-              nofile:
-                soft: 4096
-                hard: 4096
-              nproc:
-                soft: 512
-                hard: 512
       volumes:
         - name: config
           nfs:
