@@ -91,7 +91,7 @@ spec:
       nodeName: pikachu
       containers:
         - name: requestrr
-          image: darkalfx/requestrr:latest
+          image: darkalfx/requestrr-v2:latest
           volumeMounts:
             - name: config
               mountPath: /root/config
