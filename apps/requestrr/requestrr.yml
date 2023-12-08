@@ -91,20 +91,30 @@ spec:
       nodeName: pikachu
       containers:
         - name: requestrr
-          image: thomst08/requestrr:latest
+          image: darkalfx/requestrr:latest
           volumeMounts:
             - name: config
               mountPath: /root/config
           env:
             - name: PUID
-              value: "0"
+              value: "99"
             - name: PGID
-              value: "0"
+              value: "100"
             - name: TZ
               value: America/Chicago
           ports:
             - name: http
               containerPort: 4545
+          securityContext:
+            capabilities: {}
+            privileged: false
+            ulimits:
+              nofile:
+                soft: 4096
+                hard: 4096
+              nproc:
+                soft: 512
+                hard: 512
       volumes:
         - name: config
           nfs:
