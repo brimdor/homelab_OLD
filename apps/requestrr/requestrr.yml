@@ -89,6 +89,10 @@ spec:
         app: requestrr
     spec:
       nodeName: pikachu
+      initContainers:
+      - name: increase-limits
+        image: busybox
+        command: ['sh', '-c', 'ulimit -n 4096']
       containers:
         - name: requestrr
           image: darkalfx/requestrr:latest
@@ -97,9 +101,9 @@ spec:
               mountPath: /root/config
           env:
             - name: PUID
-              value: "0"
+              value: "99"
             - name: PGID
-              value: "0"
+              value: "100"
             - name: TZ
               value: America/Chicago
           ports:

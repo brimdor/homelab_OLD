@@ -1,3 +1,10 @@
+# kured:
+#   configuration:
+#     annotateNodes: true
+#     rebootSentinelCommand: sh -c "! needs-restarting --reboothint"
+#     timeZone: America/Chicago
+
+
 kured:
   configuration:
     annotateNodes: true
