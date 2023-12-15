@@ -46,7 +46,7 @@ spec:
             - name: DISCORD__REQUESTED_MSG_STYLE
               value: embed
             - name: PARTIAL_SEASONS
-              value: true
+              value: "true"
             - name: LOG_LEVEL
               value: error
       volumes:
