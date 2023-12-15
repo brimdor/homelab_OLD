@@ -44,11 +44,11 @@ spec:
             - name: DISCORD__MAS_RESULTS
               value: "25"
             - name: DISCORD__REQUESTED_MSG_STYLE
-              value: "embed"
+              value: embed
             - name: PARTIAL_SEASONS
-              value: "true"
+              value: true
             - name: LOG_LEVEL
-              value: "error"
+              value: error
       volumes:
         - name: config
           nfs:
