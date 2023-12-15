@@ -90,21 +90,26 @@ spec:
     spec:
       nodeName: pikachu
       containers:
-        - name: requestrr
-          image: darkalfx/requestrr:latest
-          volumeMounts:
-            - name: config
-              mountPath: /root/config
-          env:
-            - name: PUID
-              value: "99"
-            - name: PGID
-              value: "100"
-            - name: TZ
-              value: America/Chicago
-          ports:
-            - name: http
-              containerPort: 4545
+      - name: requestrr
+        image: darkalfx/requestrr:latest
+        command: ["/bin/sh", "-c"]
+        args: 
+          - |
+            ulimit -n 4096
+            exec dotnet Requestrr.WebApi.dll
+        volumeMounts:
+          - name: config
+            mountPath: /root/config
+        env:
+          - name: PUID
+            value: "99"
+          - name: PGID
+            value: "100"
+          - name: TZ
+            value: America/Chicago
+        ports:
+          - name: http
+            containerPort: 4545
       volumes:
         - name: config
           nfs:
