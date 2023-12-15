@@ -36,11 +36,11 @@ spec:
             - name: RADARR__API
               value: "b87a2d0f93654958ad5e0301eb3085a1"
             - name: RADARR__URL
-              value: "https://radarr.eaglepass.io"
+              value: "http://10.43.10.214:7878"
             - name: SONARR__API
               value: "f97d946bdb574d338babef75056725b7"
             - name: SONARR__URL
-              value: "https://sonarr.eaglepass.io"
+              value: "http://10.43.10.215:8989"
             - name: DISCORD__MAS_RESULTS
               value: "25"
             - name: DISCORD__REQUESTED_MSG_STYLE
