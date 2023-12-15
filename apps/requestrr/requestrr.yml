@@ -89,12 +89,6 @@ spec:
         app: requestrr
     spec:
       nodeName: pikachu
-      initContainers:
-      - name: increase-limits
-        image: busybox
-        securityContext:
-          privileged: true
-        command: ['sh', '-c', 'sysctl -w fs.inotify.max_user_watches=524288 && ulimit -n 4096']
       containers:
         - name: requestrr
           image: darkalfx/requestrr:latest
