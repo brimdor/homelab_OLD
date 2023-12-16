@@ -32,7 +32,7 @@ spec:
             - name: TZ
               value: America/Chicago
             - name: DISCORD__TOKEN
-              value: "MTE4NTM0NjgxMTY3MDU2NDkzNA.GIOsy3.xWw0ibc99x258-yMog1DtiYEjj8FMHL72S0ICk"
+              value: "MTE4NTM0NjgxMTY3MDU2NDkzNA.GdGOHD.x2l44p1mslSotSzwUYtp00sMaYgTo_xYb0d-Go"
             - name: RADARR__API
               value: "b87a2d0f93654958ad5e0301eb3085a1"
             - name: RADARR__URL
