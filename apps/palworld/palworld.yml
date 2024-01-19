@@ -122,7 +122,7 @@ spec:
             - name: http
               containerPort: 8211
       volumes:
-        - name: backup-config
+        - name: config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/palworld_config
