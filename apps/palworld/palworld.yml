@@ -92,9 +92,9 @@ spec:
       containers:
         - name: palworld
           image: jammsen/palworld-dedicated-server
-          volumeMounts:
-            - name: config
-              mountPath: /srv/palworld
+          # volumeMounts:
+          #   - name: config
+          #     mountPath: /srv/palworld
           env:
             # - name: PUID
             #   value: "99"
@@ -121,11 +121,11 @@ spec:
           ports:
             - name: http
               containerPort: 8211
-      volumes:
-        - name: config
-          nfs:
-            server: 10.0.50.3
-            path: /mnt/user/palworld_config
+      # volumes:
+        # - name: config
+        #   nfs:
+        #     server: 10.0.50.3
+        #     path: /mnt/user/palworld_config
         # - name: config
         #   hostPath:
         #     path: /palworld/config
