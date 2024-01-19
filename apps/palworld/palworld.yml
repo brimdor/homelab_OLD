@@ -91,7 +91,7 @@ spec:
       # nodeName: pikachu
       containers:
         - name: palworld
-          image: jammsen/palworld-dedicated-server
+          image: kagurazakanyaa/palworld
           # volumeMounts:
           #   - name: config
           #     mountPath: /srv/palworld
