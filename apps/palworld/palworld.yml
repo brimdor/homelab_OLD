@@ -1,0 +1,131 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: palworld-ingress
+#   labels:
+#     app: palworld
+#     app.kubernetes.io/name: palworld
+#     app.kubernetes.io/instance: palworld
+#   annotations:
+#     cert-manager.io/cluster-issuer: letsencrypt-prod
+#     hajimari.io/appName: palworld
+#     hajimari.io/icon: surround-sound
+# spec:
+#   ingressClassName: nginx
+#   tls:
+#     - hosts:
+#         - palworld.eaglepass.io
+#       secretName: palworld-tls-certificate
+#   rules:
+#     - host: palworld.eaglepass.io
+#       http:
+#         paths:
+#           - path: /
+#             backend:
+#               service:
+#                 name: palworld-service
+#                 port:
+#                   name: http
+#             pathType: Prefix
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: palworld-service
+  labels:
+    app: palworld
+    app.kubernetes.io/name: palworld
+    app.kubernetes.io/instance: palworld
+spec:
+  type: ClusterIP
+  externalTrafficPolicy:
+  ports:
+    - name: http
+      port: 8211
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: palworld
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: palworld-connect
+  labels:
+    app: palworld
+    app.kubernetes.io/name: palworld
+    app.kubernetes.io/instance: palworld
+spec:
+  clusterIP: 10.43.10.231
+  ports:
+    - name: http
+      port: 8211
+      targetPort: 8211
+      protocol: TCP
+  selector:
+    app: palworld
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: palworld-deployment
+  labels:
+    app: palworld
+  namespace: palworld
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: palworld
+  template:
+    metadata:
+      labels:
+        app: palworld
+    spec:
+      # nodeName: pikachu
+      containers:
+        - name: palworld
+          image: jammsen/palworld-dedicated-server
+          # volumeMounts:
+          #   - name: config
+          #     mountPath: /srv/palworld
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            # - name: LANGUAGE
+            #   value: en_US.UTF-8
+            - name: TZ
+              value: "America/Chicago"
+            - name: ALWAYS_UPDATE_ON_START
+              value: "true"
+            - name: GAME_PORT
+              value: "8211"
+            - name: MAX_PLAYERS
+              value: "8"
+            - name: SERVER_NAME
+              value: "Broville"
+            - name: SERVER_PASSWORD
+              value: "5thWard"
+            - name: MULTITHREAD_ENABLED
+              value: "true"
+            - name: COMMUNITY_SERVER
+              value: "false"
+          ports:
+            - name: http
+              containerPort: 8211
+      # volumes:
+        # - name: config
+        #   nfs:
+        #     server: 10.0.50.3
+        #     path: /mnt/user/palworld_config
+        # - name: config
+        #   hostPath:
+        #     path: /palworld/config
