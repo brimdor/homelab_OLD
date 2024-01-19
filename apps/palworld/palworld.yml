@@ -104,19 +104,19 @@ spec:
             #   value: en_US.UTF-8
             - name: TZ
               value: "America/Chicago"
-            - name: ALWAYS_UPDATE_ON_START
+            - name: FORCE_UPDATE
               value: "true"
             - name: GAME_PORT
               value: "8211"
             - name: MAX_PLAYERS
               value: "8"
-            - name: SERVER_NAME
-              value: "Broville"
-            - name: SERVER_PASSWORD
-              value: "5thWard"
-            - name: MULTITHREAD_ENABLED
+            # - name: SERVER_NAME
+            #   value: "Broville"
+            # - name: SERVER_PASSWORD
+            #   value: "5thWard"
+            - name: ENABLE_MULTITHREAD
               value: "true"
-            - name: COMMUNITY_SERVER
+            - name: IS_PUBLIC
               value: "false"
           ports:
             - name: http
