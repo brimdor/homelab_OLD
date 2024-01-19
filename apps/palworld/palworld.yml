@@ -96,10 +96,10 @@ spec:
             - name: config
               mountPath: /srv/palworld
           env:
-            - name: PUID
-              value: "99"
-            - name: PGID
-              value: "100"
+            # - name: PUID
+            #   value: "99"
+            # - name: PGID
+            #   value: "100"
             # - name: LANGUAGE
             #   value: en_US.UTF-8
             - name: TZ
