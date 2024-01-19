@@ -108,8 +108,8 @@ spec:
             #   value: "true"
             - name: GAME_PORT
               value: "8211"
-            # - name: MAX_PLAYERS
-            #   value: "8"
+            - name: MAX_PLAYERS
+              value: "8"
             # - name: SERVER_NAME
             #   value: "Broville"
             # - name: SERVER_PASSWORD
@@ -117,7 +117,7 @@ spec:
             - name: ENABLE_MULTITHREAD
               value: "true"
             - name: IS_PUBLIC
-              value: "false"
+              value: "true"
           ports:
             - name: http
               containerPort: 8211
