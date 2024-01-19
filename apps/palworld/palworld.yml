@@ -104,12 +104,12 @@ spec:
             #   value: en_US.UTF-8
             - name: TZ
               value: "America/Chicago"
-            - name: FORCE_UPDATE
-              value: "true"
+            # - name: FORCE_UPDATE
+            #   value: "true"
             - name: GAME_PORT
               value: "8211"
-            - name: MAX_PLAYERS
-              value: "8"
+            # - name: MAX_PLAYERS
+            #   value: "8"
             # - name: SERVER_NAME
             #   value: "Broville"
             # - name: SERVER_PASSWORD
