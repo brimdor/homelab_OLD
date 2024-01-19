@@ -103,21 +103,21 @@ spec:
             # - name: LANGUAGE
             #   value: en_US.UTF-8
             - name: TZ
-              value: America/Chicago
+              value: "America/Chicago"
             - name: ALWAYS_UPDATE_ON_START
-              value: true
+              value: "true"
             - name: GAME_PORT
               value: 8211
             - name: MAX_PLAYERS
               value: 8
             - name: SERVER_NAME
-              value: Broville
+              value: "Broville"
             - name: SERVER_PASSWORD
-              value: 5thWard
+              value: "5thWard"
             - name: MULTITHREAD_ENABLED
-              value: true
+              value: "true"
             - name: COMMUNITY_SERVER
-              value: false
+              value: "false"
           ports:
             - name: http
               containerPort: 8211
