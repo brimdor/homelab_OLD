@@ -107,9 +107,9 @@ spec:
             - name: ALWAYS_UPDATE_ON_START
               value: "true"
             - name: GAME_PORT
-              value: 8211
+              value: "8211"
             - name: MAX_PLAYERS
-              value: 8
+              value: "8"
             - name: SERVER_NAME
               value: "Broville"
             - name: SERVER_PASSWORD
