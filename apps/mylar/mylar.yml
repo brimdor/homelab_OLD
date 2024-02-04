@@ -101,13 +101,10 @@ spec:
       labels:
         app: mylar
     spec:
-      nodeName: pikachu
       containers:
         - name: mylar
           image: ghcr.io/linuxserver/mylar3:latest
           volumeMounts:
-            - name: config1
-              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -129,16 +126,13 @@ spec:
             - name: http
               containerPort: 8090
       volumes:
-        - name: config1
+        - name: config
           persistentVolumeClaim:
             claimName: mylar-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/mylar_backups
-        - name: config
-          hostPath:
-            path: /mylar/config
         - name: downloads
           nfs:
             server: 10.0.50.3
