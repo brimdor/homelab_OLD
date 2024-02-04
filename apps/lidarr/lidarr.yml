@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lidarr-config
+  namespace: lidarr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,6 +106,8 @@ spec:
         - name: lidarr
           image: lscr.io/linuxserver/lidarr:latest
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -106,24 +121,19 @@ spec:
               value: "99"
             - name: PGID
               value: "100"
-            # - name: PATH
-            #   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-            # - name: HOME
-            #   value: /root
             - name: LANGUAGE
               value: en_US.UTF-8
             - name: DOCKER_MODS
               value: linuxserver/mods:lidarr-flac2mp3
-            # - name: TERM
-            #   value: xterm
-            # - name: XDG_CONFIG_HOME
-            #   value: /config/xdg
             - name: TZ
               value: America/Chicago
           ports:
             - name: http
               containerPort: 8686
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: lidarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
