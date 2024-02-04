@@ -98,13 +98,10 @@ spec:
       labels:
         app: emby
     spec:
-      # nodeName: charmander
       containers:
         - name: emby
           image: lscr.io/linuxserver/emby
           volumeMounts:
-            # - name: config1
-            #   mountPath: /config1
             - name: config
               mountPath: /config
             - name: transcode
@@ -135,9 +132,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: emby-config
-        # - name: config
-        #   hostPath:
-        #     path: /emby/config
         - name: backup
           nfs:
             server: 10.0.50.3
