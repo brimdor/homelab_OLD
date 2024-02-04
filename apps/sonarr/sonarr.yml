@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-config
+  namespace: sonarr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,6 +106,8 @@ spec:
         - name: sonarr
           image: ghcr.io/linuxserver/sonarr:latest
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -122,6 +137,9 @@ spec:
             - name: http
               containerPort: 8989
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: sonarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
