@@ -101,13 +101,13 @@ spec:
       labels:
         app: sonarr
     spec:
-      nodeName: bulbasaur
+      # nodeName: bulbasaur
       containers:
         - name: sonarr
           image: ghcr.io/linuxserver/sonarr:latest
           volumeMounts:
-            - name: config1
-              mountPath: /config1
+            # - name: config1
+            #   mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -137,16 +137,16 @@ spec:
             - name: http
               containerPort: 8989
       volumes:
-        - name: config1
+        - name: config
           persistentVolumeClaim:
             claimName: sonarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/sonarr_backups
-        - name: config
-          hostPath:
-            path: /sonarr/config
+        # - name: config
+        #   hostPath:
+        #     path: /sonarr/config
         - name: downloads
           nfs:
             server: 10.0.50.3
