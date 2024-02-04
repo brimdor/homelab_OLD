@@ -66,6 +66,19 @@ spec:
     app: emby
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: emby-config
+  namespace: emby
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -90,6 +103,8 @@ spec:
         - name: emby
           image: lscr.io/linuxserver/emby
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: transcode
@@ -117,6 +132,9 @@ spec:
             - name: http2
               containerPort: 8920
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: emby-config
         - name: config
           hostPath:
             path: /emby/config
