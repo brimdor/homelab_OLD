@@ -119,7 +119,7 @@ spec:
             - name: TZ
               value: "America/Chicago"
             - name: PLEX_CLAIM
-              value: claim-hgifdvmeMsw5pJ4t_f1u
+              value: claim-1PEwTA8Ns8JuywbXmfXy
           ports:
             - name: http
               containerPort: 32400
