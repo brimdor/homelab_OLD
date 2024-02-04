@@ -91,13 +91,10 @@ spec:
       labels:
         app: plex
     spec:
-      nodeName: pikachu
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex:latest
           volumeMounts:
-            - name: config1
-              mountPath: /config1
             - name: config
               mountPath: /config
             - name: transcode
@@ -131,12 +128,9 @@ spec:
             - name: http3
               containerPort: 1900
       volumes:
-        - name: config1
+        - name: config
           persistentVolumeClaim:
             claimName: plex-config
-        - name: config
-          hostPath:
-            path: /plex/config
         - name: backup
           nfs:
             server: 10.0.50.3
