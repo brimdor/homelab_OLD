@@ -29,26 +29,6 @@ spec:
                 port:
                   name: http
             pathType: Prefix
-    # - host: plex-api.eaglepass.io
-    #   http:
-    #     paths:
-    #       - path: /
-    #         backend:
-    #           service:
-    #             name: plex-service
-    #             port:
-    #               name: http2
-    #         pathType: Prefix
-    # - host: plex-udp.eaglepass.io
-    #   http:
-    #     paths:
-    #       - path: /
-    #         backend:
-    #           service:
-    #             name: plex-service
-    #             port:
-    #               name: http3
-    #         pathType: Prefix
 
 ---
 
@@ -79,7 +59,18 @@ spec:
   selector:
     app: plex
 
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-config
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 
 ---
 apiVersion: apps/v1
@@ -106,6 +97,8 @@ spec:
         - name: plex
           image: lscr.io/linuxserver/plex:latest
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: transcode
@@ -139,6 +132,9 @@ spec:
             - name: http3
               containerPort: 1900
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: plex-config
         - name: config
           hostPath:
             path: /plex/config
