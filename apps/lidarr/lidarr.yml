@@ -101,13 +101,10 @@ spec:
       labels:
         app: lidarr
     spec:
-      nodeName: pikachu
       containers:
         - name: lidarr
           image: lscr.io/linuxserver/lidarr:latest
           volumeMounts:
-            - name: config1
-              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -131,16 +128,13 @@ spec:
             - name: http
               containerPort: 8686
       volumes:
-        - name: config1
+        - name: config
           persistentVolumeClaim:
             claimName: lidarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/lidarr_backups
-        - name: config
-          hostPath:
-            path: /lidarr/config
         - name: downloads
           nfs:
             server: 10.0.50.3
