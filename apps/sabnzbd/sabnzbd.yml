@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sabnzbd-config
+  namespace: sabnzbd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -92,6 +105,8 @@ spec:
         - name: sabnzbd
           image: linuxserver/sabnzbd:latest
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backups
@@ -113,6 +128,9 @@ spec:
             - name: http
               containerPort: 8080
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: sabnzbd-config
         - name: config
           hostPath:
             path: /sabnzbd/config
