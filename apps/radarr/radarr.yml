@@ -106,8 +106,8 @@ spec:
         - name: radarr
           image: ghcr.io/linuxserver/radarr:latest
           volumeMounts:
-            - name: radarr-config
-              mountPath: /config1
+            # - name: radarr-config
+            #   mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -136,16 +136,16 @@ spec:
               containerPort: 7878
 
       volumes:
-        - name: radarr-config
+        - name: config
           persistentVolumeClaim:
             claimName: radarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/radarr_backups
-        - name: config
-          hostPath:
-            path: /radarr/config
+        # - name: config
+        #   hostPath:
+        #     path: /radarr/config
         - name: downloads
           nfs:
             server: 10.0.50.3
