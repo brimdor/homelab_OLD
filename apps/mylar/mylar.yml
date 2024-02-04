@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mylar-config
+  namespace: mylar
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,6 +106,8 @@ spec:
         - name: mylar
           image: ghcr.io/linuxserver/mylar3:latest
           volumeMounts:
+            - name: config1
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -114,6 +129,9 @@ spec:
             - name: http
               containerPort: 8090
       volumes:
+        - name: config1
+          persistentVolumeClaim:
+            claimName: mylar-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
