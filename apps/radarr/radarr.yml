@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: radarr-config
+  namespace: radarr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,6 +106,8 @@ spec:
         - name: radarr
           image: ghcr.io/linuxserver/radarr:latest
           volumeMounts:
+            - name: radarr-config
+              mountPath: /config1
             - name: config
               mountPath: /config
             - name: backup-config
@@ -121,6 +136,9 @@ spec:
               containerPort: 7878
 
       volumes:
+        - name: radarr-config
+          persistentVolumeClaim:
+            claimName: radarr-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
