@@ -2,5 +2,5 @@ ansible_user: root
 ansible_ssh_private_key_file: ~/.ssh/id_ed25519
 ssh_public_key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
 dns_server: "1.1.1.1"
-control_plane_endpoint: 10.0.50.100
-load_balancer_ip_pool: 10.100.10.100/27
+control_plane_endpoint: 10.100.10.100
+load_balancer_ip_pool: 10.100.10.150/27
