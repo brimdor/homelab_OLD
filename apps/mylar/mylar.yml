@@ -69,6 +69,19 @@ spec:
   type: ClusterIP
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mylar-config
+  namespace: mylar
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,7 +101,6 @@ spec:
       labels:
         app: mylar
     spec:
-      nodeName: pikachu
       containers:
         - name: mylar
           image: ghcr.io/linuxserver/mylar3:latest
@@ -114,13 +126,13 @@ spec:
             - name: http
               containerPort: 8090
       volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: mylar-config
         - name: backup-config
           nfs:
             server: 10.0.50.3
             path: /mnt/user/mylar_backups
-        - name: config
-          hostPath:
-            path: /mylar/config
         - name: downloads
           nfs:
             server: 10.0.50.3

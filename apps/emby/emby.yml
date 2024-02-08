@@ -66,6 +66,19 @@ spec:
     app: emby
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: emby-config
+  namespace: emby
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,7 +98,6 @@ spec:
       labels:
         app: emby
     spec:
-      nodeName: charmander
       containers:
         - name: emby
           image: lscr.io/linuxserver/emby
@@ -118,8 +130,8 @@ spec:
               containerPort: 8920
       volumes:
         - name: config
-          hostPath:
-            path: /emby/config
+          persistentVolumeClaim:
+            claimName: emby-config
         - name: backup
           nfs:
             server: 10.0.50.3
