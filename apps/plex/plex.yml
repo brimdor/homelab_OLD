@@ -29,29 +29,8 @@ spec:
                 port:
                   name: http
             pathType: Prefix
-    # - host: plex-api.eaglepass.io
-    #   http:
-    #     paths:
-    #       - path: /
-    #         backend:
-    #           service:
-    #             name: plex-service
-    #             port:
-    #               name: http2
-    #         pathType: Prefix
-    # - host: plex-udp.eaglepass.io
-    #   http:
-    #     paths:
-    #       - path: /
-    #         backend:
-    #           service:
-    #             name: plex-service
-    #             port:
-    #               name: http3
-    #         pathType: Prefix
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -79,7 +58,18 @@ spec:
   selector:
     app: plex
 
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-config
+  namespace: plex
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 
 ---
 apiVersion: apps/v1
@@ -101,7 +91,6 @@ spec:
       labels:
         app: plex
     spec:
-      nodeName: pikachu
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex:latest
@@ -130,7 +119,7 @@ spec:
             - name: TZ
               value: "America/Chicago"
             - name: PLEX_CLAIM
-              value: claim-hgifdvmeMsw5pJ4t_f1u
+              value: claim-1PEwTA8Ns8JuywbXmfXy
           ports:
             - name: http
               containerPort: 32400
@@ -140,8 +129,8 @@ spec:
               containerPort: 1900
       volumes:
         - name: config
-          hostPath:
-            path: /plex/config
+          persistentVolumeClaim:
+            claimName: plex-config
         - name: backup
           nfs:
             server: 10.0.50.3
