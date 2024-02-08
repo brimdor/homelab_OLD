@@ -39,6 +39,9 @@ def load_config():
         return DEFAULT_PATTERNS.copy()
 
 # Function to find and replace a pattern in specified files
+import subprocess
+from rich.prompt import Prompt
+
 def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
     print(f"Looking for '{pattern}' to replace with '{replacement}' in {paths}")
 
@@ -53,8 +56,33 @@ def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
     )
 
     # Verbose output for debugging
+    print("")
     print("Command output:", process.stdout)
+    print("")
     print("Error (if any):", process.stderr)
+    print("")
+
+    # Check for specific Git error and prompt the user
+    if "dubious ownership in repository" in process.stderr:
+        current_dir = subprocess.run(["pwd"], capture_output=True, text=True).stdout.strip()
+        print(f"Git has detected dubious ownership in the repository at '{current_dir}'.")
+        user_decision = Prompt.ask("Would you like to automatically add this directory as a safe directory for Git? [Y/n]", default="Y")
+
+        if user_decision.lower() == 'y':
+            subprocess.run(["git", "config", "--global", "--add", "safe.directory", current_dir])
+            print(f"Added '{current_dir}' as a safe directory in global Git configuration.")
+        else:
+            print("Please run the following command manually to resolve this issue:")
+            print(f"\tgit config --global --add safe.directory {current_dir}")
+            print("Exiting configuration script.")
+            sys.exit(1)
+
+        # Re-run the find and replace command after fixing the git issue
+        process = subprocess.run(
+            git_grep_command,
+            capture_output=True,
+            text=True
+        )
 
     files_with_matches = process.stdout.splitlines()
 
@@ -67,7 +95,6 @@ def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
         with fileinput.FileInput(file_with_matches, inplace=True) as file:
             for line in file:
                 print(line.replace(pattern, replacement), end='')
-
 
 # Function to load configuration from a JSON file
 def load_config():
