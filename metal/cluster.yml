@@ -4,6 +4,9 @@
     - prerequisites
     - k3s
     - automatic_upgrade
+
+- name: Setup Custom Cluster Configurations
+  hosts: metal
     - nfs_utils
     - cronjobs
 

@@ -25,6 +25,19 @@ def check_python_version(required_version: str) -> None:
     if sys.version_info < tuple(map(int, required_version.split('.'))):
         raise Exception(f"Must be using Python >= {required_version}")
 
+# Function to load configuration from a JSON file
+def load_config():
+    try:
+        with open(CONFIG_FILE, "r") as file:
+            config = json.load(file)
+            # Update default patterns with values from config.json
+            for key in DEFAULT_PATTERNS:
+                if key in config:
+                    DEFAULT_PATTERNS[key] = config[key]
+            return config
+    except FileNotFoundError:
+        return DEFAULT_PATTERNS.copy()
+
 # Function to find and replace a pattern in specified files
 def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
     print(f"Looking for '{pattern}' to replace with '{replacement}' in {paths}")

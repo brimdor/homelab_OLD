@@ -2,6 +2,7 @@ argo-cd:
   server:
     extraArgs:
       - --insecure
+      - --enable-argo-cd-cli
     config:
       resource.ignoreResourceUpdatesEnabled: true
       resource.customizations.ignoreResourceUpdates.all: |
@@ -26,7 +27,7 @@ argo-cd:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
       hosts:
-        - &host argocd.falconpunch.org
+        - &host argocd.khuedoan.com
       tls:
         - secretName: argocd-tls-certificate
           hosts:

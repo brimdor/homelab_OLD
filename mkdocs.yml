@@ -1,11 +1,12 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
-site_name: Brimdor's Homelab
-copyright: Copyright &copy; 2020 - 2022 Khue Doan (edited by Brimdor)
+site_name: Khue's Homelab
+copyright: Copyright &copy; 2020 - 2022 Khue Doan
 
-repo_url: https://github.com/brimdor/homelab
+repo_url: https://github.com/khuedoan/homelab
 
 theme:
+  favicon: https://github.com/khuedoan/homelab/assets/27996771/d33be1af-3687-4712-a671-4370da13cc92
   name: material
   palette:
     primary: black
@@ -66,6 +67,7 @@ nav:
     - how-to-guides/run-commands-on-multiple-nodes.md
     - how-to-guides/single-node-cluster-adjustments.md
     - how-to-guides/disable-dhcp-proxy-in-dnsmasq.md
+    - how-to-guides/media-management.md
     - how-to-guides/updating-documentation.md
     - Troubleshooting:
       - how-to-guides/troubleshooting/index.md
@@ -74,7 +76,6 @@ nav:
       - how-to-guides/troubleshooting/gitea.md
       - how-to-guides/troubleshooting/longhorn.md
       - how-to-guides/troubleshooting/pxe-boot.md
-      - how-to-guides/troubleshooting/vault.md
   - Reference:
     - reference/index.md
     - Architecture:

@@ -95,11 +95,3 @@
     mode: 0600
   delegate_to: localhost
   run_once: true
-
-- name: Add system-wide alias for kubectl command
-  ansible.builtin.lineinfile:
-    path: /etc/bashrc
-    line: 'alias kubectl="k3s kubectl"'
-    create: no
-    state: present
-    backup: yes
