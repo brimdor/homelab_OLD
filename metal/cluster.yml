@@ -1,14 +1,13 @@
 - name: Create Kubernetes cluster
   hosts: metal
   roles:
+    - prerequisites
     - k3s
     - automatic_upgrade
-    - role: cronjobs
-      tags: cronjobs
+    - nfs_utils
+    - cronjobs
 
-- name: Create some basic config
+- name: Install Kubernetes addons
   hosts: localhost
-  environment:
-    KUBECONFIG: ./kubeconfig.yaml
   roles:
-    - metallb_config
+    - cilium

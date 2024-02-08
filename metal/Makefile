@@ -1,6 +1,7 @@
 .POSIX:
 
-env ?= "prod"
+env ?= prod
+export KUBECONFIG = $(shell pwd)/kubeconfig.yaml
 
 default: boot cluster
 
@@ -15,7 +16,7 @@ boot: ~/.ssh/id_ed25519
 cluster:
 	ansible-playbook \
 		--inventory inventories/${env}.yml \
-		cluster.yml $(TAGS)
+		cluster.yml
 
 console:
 	ansible-console \
