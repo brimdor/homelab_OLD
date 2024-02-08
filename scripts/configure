@@ -58,8 +58,9 @@ def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
     # Verbose output for debugging
     print("")
     print("Command output:", process.stdout)
-    print("")
+    print("---")
     print("Error (if any):", process.stderr)
+    print("---")
     print("")
 
     # Check for specific Git error and prompt the user
