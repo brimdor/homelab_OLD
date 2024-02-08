@@ -1,16 +1,7 @@
-# apiVersion: v2
-# name: kured
-# version: 0.0.0
-# dependencies:
-#   - name: kured
-#     version: 2.12.0
-#     repository: https://weaveworks.github.io/kured
-
-
 apiVersion: v2
 name: kured
 version: 0.0.0
 dependencies:
   - name: kured
-    version: 5.3.1
+    version: 4.5.0
     repository: https://kubereboot.github.io/charts

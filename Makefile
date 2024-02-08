@@ -40,7 +40,7 @@ tools:
 		--volume homelab-tools-cache:/root/.cache \
 		--volume homelab-tools-nix:/nix \
 		--workdir $(shell pwd) \
-		nixos/nix nix-shell
+		docker.io/nixos/nix nix --experimental-features 'nix-command flakes' develop
 
 test:
 	make -C test
@@ -53,13 +53,7 @@ dev:
 	make -C bootstrap
 
 docs:
-	docker run \
-		--rm \
-		--interactive \
-		--tty \
-		--publish 8000:8000 \
-		--volume $(shell pwd):/docs \
-		squidfunk/mkdocs-material
+	mkdocs serve
 
 git-hooks:
 	pre-commit install
