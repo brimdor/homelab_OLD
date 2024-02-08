@@ -1,99 +1,161 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# WIP
-# TODO clean this up
-
-"""
-Basic configure script for new users
-"""
-
+# Import necessary libraries
 import fileinput
 import subprocess
 import sys
+import json
+from rich.prompt import Prompt
 
-from rich.prompt import Confirm, Prompt
+# Path to the configuration file
+CONFIG_FILE = "scripts/config.json"
 
-default_seed_repo = "https://github.com/brimdor/homelab"
-default_domain = "eaglepass.io"
-default_timezone = "America/Chicago"
-default_terraform_workspace = "brimdor"
+# Default patterns for find_and_replace
+DEFAULT_PATTERNS = {
+    "seed_repo": "https://github.com/khuedoan/homelab",
+    "domain": "khuedoan.com",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "loadbalancer_ip_range": "192.168.1.224/27",
+    "control_plane_endpoint": "192.168.1.100",
+    "terraform_organization": "khuedoan",
+}
 
-
+# Function to check the current Python version against a required version
 def check_python_version(required_version: str) -> None:
     if sys.version_info < tuple(map(int, required_version.split('.'))):
         raise Exception(f"Must be using Python >= {required_version}")
 
-
+# Function to find and replace a pattern in specified files
 def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
+    print(f"Looking for '{pattern}' to replace with '{replacement}' in {paths}")
+
     files_with_matches = subprocess.run(
         ["git", "grep", "--files-with-matches", pattern, "--"] + paths,
         capture_output=True,
         text=True
     ).stdout.splitlines()
 
-    for file_with_maches in files_with_matches:
-        with fileinput.FileInput(file_with_maches, inplace=True) as file:
+    if not files_with_matches:
+        print(f"No files found with the pattern '{pattern}'.")
+        return
+
+    for file_with_matches in files_with_matches:
+        print(f"Updating file: {file_with_matches}")
+        with fileinput.FileInput(file_with_matches, inplace=True) as file:
             for line in file:
                 print(line.replace(pattern, replacement), end='')
 
+# Function to load configuration from a JSON file
+def load_config():
+    try:
+        with open(CONFIG_FILE, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {
+            "seed_repo": "https://github.com/khuedoan/homelab",
+            "domain": "khuedoan.com",
+            "timezone": "Asia/Ho_Chi_Minh",
+            "terraform_organization": "khuedoan",
+            "loadbalancer_ip_range": "192.168.1.224/27",
+            "control_plane_endpoint": "192.168.1.100",
+            "storage_type": "cifs",
+        }
 
-def main() -> None:
-    check_python_version(
-        required_version='3.10.0'
-    )
+# Function to save the configuration to a JSON file
+def save_config(config):
+    with open(CONFIG_FILE, "w") as file:
+        json.dump(config, file, indent=4)
 
-    editor = Prompt.ask("Select text editor", default='nvim')
-    domain = Prompt.ask("Enter your domain", default=default_domain)
-    seed_repo = Prompt.ask("Enter seed repo", default=default_seed_repo)
-    timezone = Prompt.ask("Enter time zone", default=default_timezone)
+# Function to display the current configuration and options for editing
+def display_menu(config, labels):
+    print("\nCurrent Configuration. Choose one to edit or you can 'Edit all settings':")
+    for index, key in enumerate(config.keys(), start=1):
+        print(f"{index} - {labels[key]}: {config[key]}")
+    print(f"{len(config) + 1} - Edit all settings")
+    print("0 - Exit")
 
-    find_and_replace(
-        pattern=default_domain,
-        replacement=domain,
-        paths=[
-            ".ci",
-            "apps",
-            "bootstrap",
-            "platform",
-            "system",
-            "external"
-        ]
-    )
+# Function to edit a specific setting in the configuration
+def edit_setting(config, setting):
+    new_value = Prompt.ask(f"Enter new value for {setting}", default=config[setting])
+    config[setting] = new_value
 
-    find_and_replace(
-        pattern=default_seed_repo,
-        replacement=seed_repo,
-        paths=[
-            "bootstrap",
-            "platform"
-        ]
-    )
+# Main function of the script
+def main():
+    check_python_version(required_version='3.10.0')
 
-    find_and_replace(
-        pattern=default_timezone,
-        replacement=timezone,
-        paths=[
-            "apps",
-            "system",
-            "metal"
-        ]
-    )
+    upstream_config = load_config()
 
-    if Confirm.ask("Do you want to use managed services?"):
-        terraform_workspace = Prompt.ask("Enter Terraform Organization", default=default_terraform_workspace)
+    menu_labels = {
+        "seed_repo": "Seed Repository",
+        "domain": "Domain",
+        "timezone": "Time Zone",
+        "terraform_organization": "Terraform Organization",
+        "loadbalancer_ip_range": "Loadbalancer IP Range",
+        "control_plane_endpoint": "Control Plane Endpoint",
+        "storage_type": "Storage Type (CIFS or NFS)",
+    }
 
-        find_and_replace(
-            pattern=default_terraform_workspace,
-            replacement=terraform_workspace,
-            paths=[
-                "external/versions.tf"
-            ]
-        )
+    while True:
+        display_menu(upstream_config, menu_labels)
+        choice = Prompt.ask("\nChoose an option to edit (or 0 to exit)", default="0")
 
-    subprocess.run(
-        [editor, 'metal/inventories/prod.yml']
-    )
+        if choice == "0":
+            print("Exiting...")
+            break
 
+        made_changes = False
+        if choice.isdigit() and 1 <= int(choice) <= len(upstream_config):
+            selected_key = list(upstream_config.keys())[int(choice) - 1]
+            edit_setting(upstream_config, selected_key)
+            made_changes = True
+        elif choice == str(len(upstream_config) + 1):
+            for key in upstream_config.keys():
+                edit_setting(upstream_config, key)
+            made_changes = True
 
+        if made_changes:
+            save_config(upstream_config)
+            print("Configuration updated and saved.")
+            print("Applying the updated configuration...")
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['seed_repo'],
+                replacement=upstream_config['seed_repo'],
+                paths=["bootstrap", "platform"]
+            )
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['domain'],
+                replacement=upstream_config['domain'],
+                paths=[".ci", "apps", "bootstrap", "platform", "system", "external"]
+            )
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['timezone'],
+                replacement=upstream_config['timezone'],
+                paths=["apps", "system", "metal"]
+            )
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['loadbalancer_ip_range'],
+                replacement=upstream_config['loadbalancer_ip_range'],
+                paths=["metal", "external/main.tf",]
+            )
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['control_plane_endpoint'],
+                replacement=upstream_config['control_plane_endpoint'],
+                paths=["metal"]
+            )
+            find_and_replace(
+                pattern=DEFAULT_PATTERNS['terraform_organization'],
+                replacement=upstream_config['terraform_organization'],
+                paths=["external/versions.tf"]
+            )
+            if upstream_config['storage_type'] == 'nfs':
+                print("Updating storage type to NFS...")
+                find_and_replace(
+                    pattern='#- nfs_utils',
+                    replacement='- nfs_utils',
+                    paths=["metal/cluster.yml"]
+            )
+            print("Configuration update process complete.")
+
+# Entry point for the script
 if __name__ == '__main__':
     main()
