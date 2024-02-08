@@ -42,11 +42,21 @@ def load_config():
 def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
     print(f"Looking for '{pattern}' to replace with '{replacement}' in {paths}")
 
-    files_with_matches = subprocess.run(
-        ["git", "grep", "--files-with-matches", pattern, "--"] + paths,
+    # Running git grep and capturing output
+    git_grep_command = ["git", "grep", "--files-with-matches", pattern, "--"] + paths
+    print(f"Executing command: {' '.join(git_grep_command)}")  # Verbose output
+
+    process = subprocess.run(
+        git_grep_command,
         capture_output=True,
         text=True
-    ).stdout.splitlines()
+    )
+
+    # Verbose output for debugging
+    print("Command output:", process.stdout)
+    print("Error (if any):", process.stderr)
+
+    files_with_matches = process.stdout.splitlines()
 
     if not files_with_matches:
         print(f"No files found with the pattern '{pattern}'.")
@@ -57,6 +67,7 @@ def find_and_replace(pattern: str, replacement: str, paths: list[str]) -> None:
         with fileinput.FileInput(file_with_matches, inplace=True) as file:
             for line in file:
                 print(line.replace(pattern, replacement), end='')
+
 
 # Function to load configuration from a JSON file
 def load_config():
@@ -148,7 +159,7 @@ def main():
             find_and_replace(
                 pattern=DEFAULT_PATTERNS['loadbalancer_ip_range'],
                 replacement=upstream_config['loadbalancer_ip_range'],
-                paths=["metal", "external/main.tf",]
+                paths=["metal/group_vars/all.yml", "external/main.tf",]
             )
             find_and_replace(
                 pattern=DEFAULT_PATTERNS['control_plane_endpoint'],
