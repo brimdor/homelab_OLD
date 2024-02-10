@@ -19,4 +19,7 @@ echo "Removing homelab folder"
 cd ~
 sudo rm -Rf homelab
 
+echo "Pulling a Fresh Clone of Homelab"
+git clone https://github.com/brimdor/homelab
+
 echo "And Bob is your uncle!"
